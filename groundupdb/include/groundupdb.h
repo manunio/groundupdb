@@ -5,4 +5,9 @@
 #ifndef GROUNDUPDB_H
 #define GROUNDUPDB_H
 
+class GroundUpDB{
+public:
+	GroundUpDB();
+};
+
 #endif //GROUNDUPDB_H

@@ -56,3 +56,5 @@ compile_commands.json
 
 build
 highwayhash
+
+**/cmake-build-debug
