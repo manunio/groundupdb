@@ -6,7 +6,7 @@
 #include <filesystem>
 #include <string>
 
-#include "groundupdb.h"
+#include "groundupdb/groundupdb.h"
 
 namespace fs = std::filesystem;
 

@@ -3,7 +3,7 @@
 //
 #include <iostream>
 #include "cxxopts.hpp"
-#include "groundupdb.h"
+#include "groundupdb/groundupdb.h"
 
 using namespace std;
 
