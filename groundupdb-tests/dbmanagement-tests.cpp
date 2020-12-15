@@ -19,5 +19,8 @@ TEST_CASE("Create a new empty database", "[CreateEmptyDatabase]") {
 
 		const auto& p= fs::directory_iterator(db.getDirectory());
 		REQUIRE(p == end(p));
+
+		db.destroy();
+		REQUIRE(!fs::exists(fs::status(db.getDirectory())));
 	}
 }
