@@ -9,13 +9,13 @@
 
 namespace fs = std::filesystem;
 
-Database::Database(std::string dbname, std::string fullpath)
+groundupdb::Database::Database(std::string dbname, std::string fullpath)
 	: m_name(dbname), m_fullpath(fullpath)
 {
 
 }
 //Management functions
-Database Database::createEmpty(std::string dbname)
+groundupdb::Database groundupdb::Database::createEmpty(std::string dbname)
 {
 	std::string basedir(".groundupdb");
 	if (!fs::exists(basedir))
@@ -26,13 +26,13 @@ Database Database::createEmpty(std::string dbname)
 	return Database(dbname, dbfolder);
 }
 
-void Database::destroy()
+void groundupdb::Database::destroy()
 {
 	if (fs::exists(m_fullpath))
 		fs::remove_all(m_fullpath);
 }
 
-Database Database::loadDB(std::string dbname)
+groundupdb::Database groundupdb::Database::loadDB(std::string dbname)
 {
 	//here we assume everything exists..
 	std::string basedir(".groundupdb");
@@ -42,12 +42,12 @@ Database Database::loadDB(std::string dbname)
 }
 
 //Instance functions
-std::string Database::getDirectory()
+std::string groundupdb::Database::getDirectory()
 {
 	return m_fullpath;
 }
 
-void Database::setKeyValue(std::string key, std::string value)
+void groundupdb::Database::setKeyValue(std::string key, std::string value)
 {
 	std::ofstream os;
 	os.open(m_fullpath + "/" + key + "_string.kv", std::ios::out | std::ios::trunc);
@@ -55,7 +55,7 @@ void Database::setKeyValue(std::string key, std::string value)
 	os.close();
 
 }
-std::string Database::getKeyValue(std::string key)
+std::string groundupdb::Database::getKeyValue(std::string key)
 {
 	std::ifstream t(m_fullpath + "/" + key + "_string.kv");
 	std::string value;

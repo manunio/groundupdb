@@ -12,7 +12,7 @@ TEST_CASE("Store and retrieve a value", "[setKeyValue, getKeyValue]")
 {
 	SECTION("Basic set and get") {
 		std::string dbname("myemptydb");
-		Database db(GroundUpDB::createEmptyDB(dbname));
+		groundupdb::Database db(groundupdb::GroundUpDB::createEmptyDB(dbname));
 
 		std::string key("simplestring");
 		std::string value("A test value");

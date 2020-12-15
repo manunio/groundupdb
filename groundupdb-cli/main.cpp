@@ -38,7 +38,7 @@ int main(int argc, char* argv[])
 		}
 		//create database
 		std::string dbname(result["n"].as<std::string>());
-		Database db(GroundUpDB::createEmptyDB(dbname));
+		groundupdb::Database db(groundupdb::GroundUpDB::createEmptyDB(dbname));
 		return 0;
 	}
 
@@ -66,7 +66,7 @@ int main(int argc, char* argv[])
 		std::string dbname(result["n"].as<std::string>());
 		std::string k(result["k"].as<std::string>());
 		std::string v(result["v"].as<std::string>());
-		Database db(GroundUpDB::loadDB(dbname));
+		groundupdb::Database db(groundupdb::GroundUpDB::loadDB(dbname));
 		db.setKeyValue(k, v);
 		return 0;
 	}
@@ -88,7 +88,7 @@ int main(int argc, char* argv[])
 		//Get key value from database
 		std::string dbname(result["n"].as<std::string>());
 		std::string k(result["k"].as<std::string>());
-		Database db(GroundUpDB::loadDB(dbname));
+		groundupdb::Database db(groundupdb::GroundUpDB::loadDB(dbname));
 		cout << db.getKeyValue(k) << endl;
 		return 0;
 	}
@@ -103,7 +103,7 @@ int main(int argc, char* argv[])
 		}
 		//destroy database
 		std::string dbname(result["n"].as<std::string>());
-		Database db(GroundUpDB::loadDB(dbname));
+		groundupdb::Database db(groundupdb::GroundUpDB::loadDB(dbname));
 		db.destroy();
 		return 0;
 	}

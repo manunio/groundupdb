@@ -13,7 +13,7 @@ namespace fs = std::filesystem;
 TEST_CASE("Create a new empty database", "[CreateEmptyDatabase]") {
 	SECTION("Default Settings") {
 		std::string dbname("myemptydb");
-		Database db(GroundUpDB::createEmptyDB(dbname));
+		groundupdb::Database db(groundupdb::GroundUpDB::createEmptyDB(dbname));
 
 		REQUIRE(fs::is_directory(fs::status(db.getDirectory())));
 
@@ -28,9 +28,9 @@ TEST_CASE("Create a new empty database", "[CreateEmptyDatabase]") {
 TEST_CASE("Load and existing database", "[loadDB]") {
 	SECTION("Default Settings") {
 		std::string dbname("myemptydb");
-		Database db(GroundUpDB::createEmptyDB(dbname));
+		groundupdb::Database db(groundupdb::GroundUpDB::createEmptyDB(dbname));
 
-		Database db2(GroundUpDB::loadDB(dbname));
+		groundupdb::Database db2(groundupdb::GroundUpDB::loadDB(dbname));
 
 		REQUIRE(fs::is_directory(fs::status(db2.getDirectory())));
 

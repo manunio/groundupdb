@@ -3,14 +3,14 @@
 //
 #include "groundupdb.h"
 
-GroundUpDB::GroundUpDB(){
+groundupdb::GroundUpDB::GroundUpDB(){
 
 }
-Database GroundUpDB::createEmptyDB(std::string &dbname)
+groundupdb::Database groundupdb::GroundUpDB::createEmptyDB(std::string &dbname)
 {
 	return Database::createEmpty(dbname);
 }
-Database GroundUpDB::loadDB(std::string& dbname)
+groundupdb::Database groundupdb::GroundUpDB::loadDB(std::string& dbname)
 {
 	return Database::loadDB(dbname);
 }
