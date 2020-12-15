@@ -7,11 +7,14 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 include(GNUInstallDirs)
 
 set(HEADERS
-        include/groundupdb.h)
+        include/groundupdb.h
+        include/database.h
+        )
 
 add_library(groundupdb
         ${HEADERS}
         src/groundupdb.cpp
+        src/database.cpp
         )
 
 set_target_properties(groundupdb PROPERTIES PUBLIC_HEADER "${HEADER}")
