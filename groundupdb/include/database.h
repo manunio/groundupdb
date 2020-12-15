@@ -21,8 +21,7 @@ public:
 	//management functions
 	static Database createEmpty(std::string dbname);
 	void destroy();
-
-
+	static Database loadDB(std::string dbname);
 protected:
 	std::string m_name;
 	std::string m_fullpath;

@@ -14,7 +14,7 @@ Database::Database(std::string dbname, std::string fullpath)
 {
 
 }
-
+//Management functions
 Database Database::createEmpty(std::string dbname)
 {
 	std::string basedir(".groundupdb");
@@ -32,6 +32,16 @@ void Database::destroy()
 		fs::remove_all(m_fullpath);
 }
 
+Database Database::loadDB(std::string dbname)
+{
+	//here we assume everything exists..
+	std::string basedir(".groundupdb");
+	std::string dbfolder(basedir + "/" + dbname);
+	return Database(dbname, dbfolder);
+
+}
+
+//Instance functions
 std::string Database::getDirectory()
 {
 	return m_fullpath;
@@ -40,7 +50,7 @@ std::string Database::getDirectory()
 void Database::setKeyValue(std::string key, std::string value)
 {
 	std::ofstream os;
-	os.open(m_fullpath + "/" + "_string.kv", std::ios::out | std::ios::trunc);
+	os.open(m_fullpath + "/" + key + "_string.kv", std::ios::out | std::ios::trunc);
 	os << value;
 	os.close();
 
@@ -55,7 +65,7 @@ std::string Database::getKeyValue(std::string key)
 	t.seekg(0, std::ios::beg);
 
 	value.assign((std::istreambuf_iterator<char>(t)),
-				 std::istreambuf_iterator<char>());
+		std::istreambuf_iterator<char>());
 
 	return value;
 }
