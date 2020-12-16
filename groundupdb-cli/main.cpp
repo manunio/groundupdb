@@ -22,7 +22,7 @@ int main(int argc, char* argv[])
 		("s,set", "Set a key in a DB")
 		("g,get", "Get a key from a DB")
 		("q,query", "Query the DB (must also specify a query term. E.g. b for bucket)")
-		("n,name", "Database name (required)", cxxopts::value<std::string>())
+		("n,name", "IDatabase name (required)", cxxopts::value<std::string>())
 		("k,key", "Key to set/get", cxxopts::value<std::string>())
 		("v,value", "Value to set", cxxopts::value<std::string>());
 
@@ -38,7 +38,7 @@ int main(int argc, char* argv[])
 		}
 		//create database
 		std::string dbname(result["n"].as<std::string>());
-		groundupdb::Database db(groundupdb::GroundUpDB::createEmptyDB(dbname));
+		std::unique_ptr<groundupdb::IDatabase> db(groundupdb::GroundUpDB::createEmptyDB(dbname));
 		return 0;
 	}
 
@@ -66,8 +66,8 @@ int main(int argc, char* argv[])
 		std::string dbname(result["n"].as<std::string>());
 		std::string k(result["k"].as<std::string>());
 		std::string v(result["v"].as<std::string>());
-		groundupdb::Database db(groundupdb::GroundUpDB::loadDB(dbname));
-		db.setKeyValue(k, v);
+		std::unique_ptr<groundupdb::IDatabase> db(groundupdb::GroundUpDB::loadDB(dbname));
+		db->setKeyValue(k, v);
 		return 0;
 	}
 
@@ -88,8 +88,8 @@ int main(int argc, char* argv[])
 		//Get key value from database
 		std::string dbname(result["n"].as<std::string>());
 		std::string k(result["k"].as<std::string>());
-		groundupdb::Database db(groundupdb::GroundUpDB::loadDB(dbname));
-		cout << db.getKeyValue(k) << endl;
+		std::unique_ptr<groundupdb::IDatabase> db(groundupdb::GroundUpDB::loadDB(dbname));
+		cout << db->getKeyValue(k) << endl;
 		return 0;
 	}
 
@@ -103,8 +103,8 @@ int main(int argc, char* argv[])
 		}
 		//destroy database
 		std::string dbname(result["n"].as<std::string>());
-		groundupdb::Database db(groundupdb::GroundUpDB::loadDB(dbname));
-		db.destroy();
+		std::unique_ptr<groundupdb::IDatabase> db(groundupdb::GroundUpDB::loadDB(dbname));
+		db->destroy();
 		return 0;
 	}
 

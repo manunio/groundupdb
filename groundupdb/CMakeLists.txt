@@ -9,6 +9,8 @@ include(GNUInstallDirs)
 set(HEADERS
         include/groundupdb.h
         include/database.h
+        include/extensions/extdatabase.h
+
         )
 
 add_library(groundupdb
