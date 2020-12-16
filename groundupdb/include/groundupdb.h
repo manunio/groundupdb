@@ -1,6 +1,8 @@
 //
 // Created by maxx on 15/12/20.
 //
+// WARNING: This should ONLY include Client API files
+// i.e. NOT anything within include/extensions!
 
 #ifndef GROUNDUPDB_H
 #define GROUNDUPDB_H
@@ -9,12 +11,16 @@
 
 #include "database.h"
 
-class GroundUpDB{
-public:
-	GroundUpDB();
+namespace groundupdb
+{
+	class GroundUpDB
+	{
+	public:
+		GroundUpDB();
 
-	static Database createEmptyDB(std::string& dbname);
-	static Database loadDB(std::string& dbname);
-};
+		static std::unique_ptr<IDatabase> createEmptyDB(std::string& dbname);
+		static std::unique_ptr<IDatabase> loadDB(std::string& dbname);
+	};
+}
 
 #endif //GROUNDUPDB_H
