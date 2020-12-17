@@ -8,6 +8,7 @@
 #include <iostream>
 #include <fstream>
 #include <filesystem>
+#include <unordered_map>
 
 namespace fs = std::filesystem;
 
@@ -15,6 +16,7 @@ using namespace groundupdb;
 using namespace groundupdbext;
 
 // 'Hidden' Database::Impl class here
+
 class EmbeddedDatabase::Impl : public IDatabase
 {
 public:
@@ -34,12 +36,36 @@ public:
 private:
 	std::string m_name;
 	std::string m_fullpath;
+	std::unordered_map<std::string, std::string> m_keyValueStore;
 };
 
 EmbeddedDatabase::Impl::Impl(std::string dbname, std::string fullpath)
 	: m_name(dbname), m_fullpath(fullpath)
 {
+	for (auto& p : fs::directory_iterator(getDirectory()))
+	{
+		if (p.exists() && p.is_regular_file())
+		{
+			//check if extension is .kv
+			if (".kv" == p.path().extension())
+			{
+				std::ifstream t(p.path());
+				std::string value;
+				std::string keyWithString = p.path().filename();
+				//ASSUMPTION always ends with _string.kv
+				std::string key = keyWithString.substr(0, keyWithString.length() - 10);  // DANGEROUS!!
 
+				t.seekg(0, std::ios::end);
+				value.reserve(t.tellg());
+				t.seekg(0, std::ios::beg);
+
+				value.assign((std::istreambuf_iterator<char>(t)),
+					std::istreambuf_iterator<char>());
+
+				m_keyValueStore.insert({ key, value });
+			}
+		}
+	}
 }
 
 EmbeddedDatabase::Impl::~Impl()
@@ -71,6 +97,8 @@ void EmbeddedDatabase::Impl::destroy()
 {
 	if (fs::exists(m_fullpath))
 		fs::remove_all(m_fullpath);
+
+	m_keyValueStore.clear();
 }
 
 //Instance users functions
@@ -86,10 +114,19 @@ void EmbeddedDatabase::Impl::setKeyValue(std::string key, std::string value)
 	os.open(m_fullpath + "/" + key + "_string.kv", std::ios::out | std::ios::trunc);
 	os << value;
 	os.close();
+	m_keyValueStore.insert({ key, value });
 
 }
 std::string EmbeddedDatabase::Impl::getKeyValue(std::string key)
 {
+	const auto& v = m_keyValueStore.find(key);
+	if (v == m_keyValueStore.end())
+	{
+		return ""; //DANGEROUS! Should be 'not found TODO: error handling
+	}
+	return v->second;
+
+	/*
 	std::ifstream t(m_fullpath + "/" + key + "_string.kv");
 	std::string value;
 
@@ -101,6 +138,7 @@ std::string EmbeddedDatabase::Impl::getKeyValue(std::string key)
 		std::istreambuf_iterator<char>());
 
 	return value;
+	 */
 }
 
 
