@@ -17,6 +17,8 @@ add_library(groundupdb
         ${HEADERS}
         src/groundupdb.cpp
         src/database.cpp
+        src/memorykeyvaluestore.cpp
+        src/filekeyvaluestore.cpp
         )
 
 set_target_properties(groundupdb PROPERTIES PUBLIC_HEADER "${HEADER}")
