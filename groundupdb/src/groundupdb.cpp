@@ -2,15 +2,26 @@
 // Created by maxx on 15/12/20.
 //
 #include "groundupdb.h"
+#include "extensions/extdatabase.h"
 
-GroundUpDB::GroundUpDB(){
+using namespace groundupdb;
+using namespace groundupdbext;
 
-}
-Database GroundUpDB::createEmptyDB(std::string &dbname)
+GroundUpDB::GroundUpDB()
 {
-	return Database::createEmpty(dbname);
 }
-Database GroundUpDB::loadDB(std::string& dbname)
+
+std::unique_ptr<IDatabase> GroundUpDB::createEmptyDB(std::string& dbname)
 {
-	return Database::loadDB(dbname);
+	return EmbeddedDatabase::createEmpty(dbname);
+}
+
+std::unique_ptr<IDatabase> GroundUpDB::createEmptyDB(std::string& dbname, std::unique_ptr<KeyValueStore>& kvStore)
+{
+	return EmbeddedDatabase::createEmpty(dbname, kvStore);
+}
+
+std::unique_ptr<IDatabase> GroundUpDB::loadDB(std::string& dbname)
+{
+	return EmbeddedDatabase::load(dbname);
 }
