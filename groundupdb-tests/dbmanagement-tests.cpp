@@ -14,15 +14,20 @@ TEST_CASE("Create a new empty database", "[CreateEmptyDatabase]")
 {
 	SECTION("Default Settings")
 	{
+		std::cout << "creating db" << std::endl;
 		std::string dbname("myemptydb");
 		std::unique_ptr<groundupdb::IDatabase> db(groundupdb::GroundUpDB::createEmptyDB(dbname));
 
+		std::cout << "checking db directory" << std::endl;
 		REQUIRE(fs::is_directory(fs::status(db->getDirectory())));
 
+		std::cout << "iterating over db directory" << std::endl;
 		const auto& p = fs::directory_iterator(db->getDirectory());
 		REQUIRE(p == end(p));
 
+		std::cout << "destroying db" << std::endl;
 		db->destroy();
+		std::cout << "checking destroyed db directory" << std::endl;
 		REQUIRE(!fs::exists(fs::status(db->getDirectory())));
 	}
 }

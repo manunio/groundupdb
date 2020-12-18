@@ -7,9 +7,33 @@
 
 #include <string>
 #include <memory>
+#include <functional>
 
 namespace groundupdb
 {
+
+	class Store
+	{
+	public:
+		Store() = default;
+		virtual ~Store() = default;
+	};
+
+	class KeyValueStore : public Store
+	{
+	public:
+		KeyValueStore() = default;
+		virtual ~KeyValueStore() = default;
+
+		//Key-Value user functions
+		virtual void setKeyValue(std::string key, std::string value) = 0;
+		virtual std::string getKeyValue(std::string key) = 0;
+
+		//Key-Value management functions
+		virtual void loadKeysInfo(std::function<void(std::string key, std::string value)> callback) = 0;
+		virtual void clear() = 0;
+	};
+
 	class IDatabase
 	{
 	public:
