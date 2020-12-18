@@ -142,7 +142,7 @@ const std::unique_ptr<IDatabase> EmbeddedDatabase::createEmpty(std::string dbnam
 const std::unique_ptr<IDatabase> EmbeddedDatabase::createEmpty(std::string dbname,
 	std::unique_ptr<KeyValueStore>& kvStore)
 {
-	return EmbeddedDatabase::createEmpty(dbname, kvStore);
+	return EmbeddedDatabase::Impl::createEmpty(dbname, kvStore);
 }
 
 const std::unique_ptr<IDatabase> EmbeddedDatabase::load(std::string dbname)
