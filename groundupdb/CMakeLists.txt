@@ -10,8 +10,7 @@ set(HEADERS
         include/groundupdb.h
         include/database.h
         include/extensions/extdatabase.h
-
-        )
+        include/extensions/highwayhash.h)
 
 add_library(groundupdb
         ${HEADERS}
@@ -19,9 +18,12 @@ add_library(groundupdb
         src/database.cpp
         src/memorykeyvaluestore.cpp
         src/filekeyvaluestore.cpp
+        src/highwayhash.cpp
         )
 
 set_target_properties(groundupdb PROPERTIES PUBLIC_HEADER "${HEADER}")
+
+include_directories(${groundupdb_SOURCE_DIR}/highwayhash)
 
 target_include_directories(groundupdb
         PUBLIC

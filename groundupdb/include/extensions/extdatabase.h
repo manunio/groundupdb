@@ -6,6 +6,7 @@
 #define EXTDATABASE_H
 
 #include "database.h"
+#include "extensions/highwayhash.h"
 
 #include <memory>
 

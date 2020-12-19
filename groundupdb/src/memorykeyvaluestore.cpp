@@ -2,6 +2,7 @@
 // Created by maxx on 18/12/20.
 //
 #include "extensions/extdatabase.h"
+#include "extensions/highwayhash.h"
 
 #include <unordered_map>
 
@@ -13,7 +14,7 @@ namespace groundupdbext
 		Impl();
 		Impl(std::unique_ptr<KeyValueStore>& toCache);
 
-		std::unordered_map<std::string, std::string> m_KeyValueStore;
+		std::unordered_map<std::string, std::string, HighwayHash> m_KeyValueStore;
 		std::optional<std::unique_ptr<KeyValueStore>> m_cachedStore;
 	private:
 

@@ -5,6 +5,7 @@
 
 #include "catch.hpp"
 #include "groundupdb/groundupdb.h"
+#include "groundupdb/groundupdbext.h"
 
 TEST_CASE("Measure basic performance", "[setKeyValue, getKeyValue]")
 {

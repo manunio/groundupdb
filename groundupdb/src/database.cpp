@@ -171,3 +171,4 @@ std::string EmbeddedDatabase::getKeyValue(std::string key)
 {
 	return mImpl->getKeyValue(key);
 }
+
