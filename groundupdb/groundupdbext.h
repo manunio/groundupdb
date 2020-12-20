@@ -6,3 +6,4 @@
 #include "groundupdb.h"
 #include "include/extensions/extdatabase.h"
 #include "include/extensions/highwayhash.h"
+#include "include/extensions/extquery.h"

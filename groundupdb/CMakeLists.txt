@@ -10,7 +10,7 @@ set(HEADERS
         include/groundupdb.h
         include/database.h
         include/extensions/extdatabase.h
-        include/extensions/highwayhash.h)
+        include/extensions/highwayhash.h include/extensions/extquery.h include/query.h)
 
 add_library(groundupdb
         ${HEADERS}

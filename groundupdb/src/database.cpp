@@ -3,12 +3,15 @@
 //
 
 #include "database.h"
+#include "query.h"
 #include "extensions/extdatabase.h"
+#include "extensions/extquery.h"
 
 #include <iostream>
 #include <fstream>
 #include <filesystem>
 #include <unordered_map>
+
 
 namespace fs = std::filesystem;
 
@@ -29,7 +32,14 @@ public:
 
 	//Key-Value use cases
 	void setKeyValue(std::string key, std::string value);
+	void setKeyValue(std::string key, std::string value, std::string bucket);
+	void setKeyValue(std::string key, std::unordered_set<std::string> value);
 	std::string getKeyValue(std::string key);
+	std::unique_ptr<std::unordered_set<std::string>> getKeyValueSet(std::string key);
+
+	//Query records functions
+	std::unique_ptr<IQueryResult> query(Query& query) const;
+	std::unique_ptr<IQueryResult> query(BucketQuery& query) const;
 
 	//management functions
 	static const std::unique_ptr<IDatabase> createEmpty(std::string dbname);
@@ -41,6 +51,7 @@ private:
 	std::string m_name;
 	std::string m_fullpath;
 	std::unique_ptr<KeyValueStore> m_keyValueStore;
+	std::unique_ptr<KeyValueStore> m_indexStore;
 };
 
 EmbeddedDatabase::Impl::Impl(std::string dbname, std::string fullpath)
@@ -50,12 +61,20 @@ EmbeddedDatabase::Impl::Impl(std::string dbname, std::string fullpath)
 	std::unique_ptr<KeyValueStore> fileStore = std::make_unique<FileKeyValueStore>(fullpath);
 	std::unique_ptr<KeyValueStore> memoryStore = std::make_unique<MemoryKeyValueStore>(fileStore);
 	m_keyValueStore = std::move(memoryStore);
+
+	//Explicitly specify base type so it matches the make_unique expected class (KeyValueStore)
+	std::unique_ptr<KeyValueStore> fileIndexStore = std::make_unique<FileKeyValueStore>(fullpath + "/.indexes");
+	std::unique_ptr<KeyValueStore> memoryIndexStore = std::make_unique<MemoryKeyValueStore>(fileIndexStore);
+	m_indexStore = std::move(memoryIndexStore);
 }
 
 EmbeddedDatabase::Impl::Impl(std::string dbname, std::string fullpath, std::unique_ptr<KeyValueStore>& kvStore)
 	: m_name(dbname), m_fullpath(fullpath), m_keyValueStore(kvStore.release())
 {
-	;
+	//Explicitly specify base type so it matches the make_unique expected class (KeyValueStore)
+	std::unique_ptr<KeyValueStore> fileIndexStore = std::make_unique<FileKeyValueStore>(fullpath + "/.indexes");
+	std::unique_ptr<KeyValueStore> memoryIndexStore = std::make_unique<MemoryKeyValueStore>(fileIndexStore);
+	m_indexStore = std::move(memoryIndexStore);
 }
 
 EmbeddedDatabase::Impl::~Impl()
@@ -113,7 +132,48 @@ std::string EmbeddedDatabase::Impl::getKeyValue(std::string key)
 	return m_keyValueStore->getKeyValue(key);
 }
 
+void EmbeddedDatabase::Impl::setKeyValue(std::string key, std::string value, std::string bucket)
+{
+	setKeyValue(key, value);
+	//Add to bucket index
+	std::string idxkey("bucket::" + bucket);
+	//Query the key index
+	std::unique_ptr<std::unordered_set<std::string>> recordKeys(m_indexStore->getKeyValueSet(idxkey));
+	recordKeys->insert(key);
+	m_indexStore->setKeyValue(idxkey, *recordKeys.release()); // TODO: do we need this? Yes - may not be in memory store
+	// TODO: replace the above with appendKeyValueSet(key,value)
 
+}
+
+void EmbeddedDatabase::Impl::setKeyValue(std::string key, std::unordered_set<std::string> value)
+{
+	m_keyValueStore->setKeyValue(key, value);
+}
+
+std::unique_ptr<std::unordered_set<std::string>> EmbeddedDatabase::Impl::getKeyValueSet(std::string key)
+{
+	return m_keyValueStore->getKeyValueSet(key);
+}
+
+//Query functions
+std::unique_ptr<IQueryResult> EmbeddedDatabase::Impl::query(Query& q) const
+{
+	//return std::make_unique<DefaultResutl>(); //no result
+	//Query is abstract, so try overloading here
+	return query(static_cast<decltype(q)>(q));
+}
+
+std::unique_ptr<IQueryResult> EmbeddedDatabase::Impl::query(BucketQuery& query) const
+{
+	// Bucket query
+	// construct a name for our key index
+	std::string idxkey("bucket::" + query.bucket());
+
+	//query the key index
+	std::unique_ptr<IQueryResult> r = std::make_unique<DefaultQueryResult>(m_indexStore->getKeyValueSet(idxkey));
+	return std::move(r);
+
+}
 // High level Database client API implementation below
 
 // Embedded Database
@@ -167,8 +227,31 @@ void EmbeddedDatabase::setKeyValue(std::string key, std::string value)
 	mImpl->setKeyValue(key, value);
 }
 
+void groundupdbext::EmbeddedDatabase::setKeyValue(std::string key, std::string value, std::string bucket)
+{
+	mImpl->setKeyValue(key, value, bucket);
+}
+void EmbeddedDatabase::setKeyValue(std::string key, std::unordered_set<std::string> value)
+{
+	mImpl->setKeyValue(key, value);
+}
 std::string EmbeddedDatabase::getKeyValue(std::string key)
 {
 	return mImpl->getKeyValue(key);
 }
 
+std::unique_ptr<std::unordered_set<std::string>> groundupdbext::EmbeddedDatabase::getKeyValueSet(std::string key)
+{
+	return mImpl->getKeyValueSet(key);
+}
+
+std::unique_ptr<IQueryResult> EmbeddedDatabase::query(Query& query) const
+{
+	return mImpl->query(query);
+}
+
+std::unique_ptr<IQueryResult> EmbeddedDatabase::query(BucketQuery& query) const
+{
+	return mImpl->query(query);
+
+}

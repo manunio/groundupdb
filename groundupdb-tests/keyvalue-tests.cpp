@@ -24,4 +24,19 @@ TEST_CASE("Store and retrieve a value", "[setKeyValue, getKeyValue]")
 		db->destroy();
 		REQUIRE(!fs::exists(fs::status(db->getDirectory())));
 	}
+
+	SECTION("Bucketed set and get")
+	{
+		std::string dbname("myemptydb");
+		std::unique_ptr<groundupdb::IDatabase> db(groundupdb::GroundUpDB::createEmptyDB(dbname));
+
+		std::string key("simplestring");
+		std::string value("some highly valuable value");
+		std::string bucket("bucket 1");
+
+		db->setKeyValue(key, value, bucket);
+		REQUIRE(value == db->getKeyValue(key));
+
+		db->destroy();
+	}
 }
