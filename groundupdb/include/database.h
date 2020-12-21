@@ -50,11 +50,11 @@ namespace groundupdb
 		//Key-Value use cases
 		virtual void setKeyValue(std::string key, std::string value) = 0;
 		virtual void setKeyValue(std::string key, std::string value, std::string bucket) = 0;
-		virtual void setKeyValue(std::string key, std::unordered_set<std::string>value) = 0;
+		virtual void setKeyValue(std::string key, std::unordered_set<std::string> value) = 0;
 
 		virtual std::string getKeyValue(std::string key) = 0;
 
-		virtual Set getKeyValueSet(std::string key);
+		virtual Set getKeyValueSet(std::string key) = 0;
 
 		// Query records functions
 		virtual std::unique_ptr<IQueryResult> query(Query& query) const = 0;

@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.12)
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
@@ -9,8 +9,11 @@ include(GNUInstallDirs)
 set(HEADERS
         include/groundupdb.h
         include/database.h
+        include/query.h
         include/extensions/extdatabase.h
-        include/extensions/highwayhash.h include/extensions/extquery.h include/query.h)
+        include/extensions/highwayhash.h
+        include/extensions/extquery.h
+        )
 
 add_library(groundupdb
         ${HEADERS}
@@ -19,6 +22,7 @@ add_library(groundupdb
         src/memorykeyvaluestore.cpp
         src/filekeyvaluestore.cpp
         src/highwayhash.cpp
+        src/query.cpp
         )
 
 set_target_properties(groundupdb PROPERTIES PUBLIC_HEADER "${HEADER}")
@@ -31,7 +35,7 @@ target_include_directories(groundupdb
         $<INSTALL_INTERFACE:include>
         )
 
-target_compile_features(groundupdb PRIVATE cxx_std_17)
+target_compile_features(groundupdb PRIVATE cxx_std_20)
 
 # NB: This is here to ensure binaries that link us also link stdc++fs for non-Apple targets
 # https://github.com/OpenRCT2/OpenRCT2/pull/10522

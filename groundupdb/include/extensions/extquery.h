@@ -10,18 +10,17 @@
 namespace groundupdbext
 {
 	using namespace groundupdb;
-	using Set = std::unique_ptr<std::unordered_set<std::string>>;
 
 	class DefaultQueryResult : public IQueryResult
 	{
 	public:
 		DefaultQueryResult();
-		DefaultQueryResult(Set recordKeys);
+		explicit DefaultQueryResult(std::unique_ptr<std::unordered_set<std::string>> recordKeys);
 		virtual ~DefaultQueryResult() = default;
 
-		const Set recordKeys();
+		const std::unique_ptr<std::unordered_set<std::string>> recordKeys();
 	private:
-		Set m_recordKeys;
+		std::unique_ptr<std::unordered_set<std::string>> m_recordKeys;
 	};
 }
 

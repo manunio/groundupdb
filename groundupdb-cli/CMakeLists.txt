@@ -4,7 +4,7 @@ add_executable(groundupdb-cli main.cpp)
 
 target_link_libraries(groundupdb-cli PRIVATE groundupdb)
 
-target_compile_features(groundupdb-cli PRIVATE cxx_std_17)
+target_compile_features(groundupdb-cli PRIVATE cxx_std_20)
 
 include_directories(${groundupdb_SOURCE_DIR})
 
