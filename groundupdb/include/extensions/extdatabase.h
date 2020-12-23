@@ -23,7 +23,6 @@ namespace groundupdbext
 
 		//Key-Value user functions
 		void setKeyValue(std::string key, std::string value);
-		void setKeyValue(std::string key, std::string value, std::string bucket);
 		void setKeyValue(std::string key, std::unordered_set<std::string> value);
 		std::string getKeyValue(std::string key);
 		std::unique_ptr<std::unordered_set<std::string>> getKeyValueSet(std::string key);
@@ -45,7 +44,6 @@ namespace groundupdbext
 
 		//Key-Value user cases
 		void setKeyValue(std::string key, std::string value);
-		void setKeyValue(std::string key, std::string value, std::string bucket);
 		void setKeyValue(std::string key, std::unordered_set<std::string> value);
 		std::string getKeyValue(std::string key);
 		std::unique_ptr<std::unordered_set<std::string>> getKeyValueSet(std::string key);
@@ -71,6 +69,7 @@ namespace groundupdbext
 		//Key-Value use cases
 		void setKeyValue(std::string key, std::string value);
 		void setKeyValue(std::string key, std::string value, std::string bucket);
+		void setKeyValue(std::string key, std::unordered_set<std::string> value, std::string bucket);
 		void setKeyValue(std::string key, std::unordered_set<std::string> value);
 		std::string getKeyValue(std::string key);
 		std::unique_ptr<std::unordered_set<std::string>> getKeyValueSet(std::string key);

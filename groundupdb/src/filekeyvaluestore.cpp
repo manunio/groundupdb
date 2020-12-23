@@ -101,12 +101,6 @@ namespace groundupdbext
 			fs::remove_all(mImpl->m_fullpath);
 	}
 
-	void FileKeyValueStore::setKeyValue(std::string key, std::string value, std::string bucket)
-	{
-		setKeyValue(key, value);
-		//NOTE: Bucket indexing implemented at DATABASE level, not kv store level.
-	}
-
 	void FileKeyValueStore::setKeyValue(std::string key, std::unordered_set<std::string> value)
 	{
 		// store in _string_set.kv file elements_num<length,value...>...

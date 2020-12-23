@@ -12,6 +12,8 @@
 #include <unordered_map>
 
 
+#pragma clang diagnostic push
+#pragma ide diagnostic ignored "NotImplementedFunctions"
 namespace fs = std::filesystem;
 
 using namespace groundupdb;
@@ -32,6 +34,7 @@ public:
 	//Key-Value use cases
 	void setKeyValue(std::string key, std::string value);
 	void setKeyValue(std::string key, std::string value, std::string bucket);
+	void setKeyValue(std::string key, std::unordered_set<std::string> value, std::string bucket);
 	void setKeyValue(std::string key, std::unordered_set<std::string> value);
 	std::string getKeyValue(std::string key);
 	std::unique_ptr<std::unordered_set<std::string>> getKeyValueSet(std::string key);
@@ -39,6 +42,7 @@ public:
 	//Query records functions
 	std::unique_ptr<IQueryResult> query(Query& query) const;
 	std::unique_ptr<IQueryResult> query(BucketQuery& query) const;
+	void indexForBucket(std::string key, std::string bucket);
 
 	//management functions
 	static const std::unique_ptr<IDatabase> createEmpty(std::string dbname);
@@ -126,6 +130,18 @@ void EmbeddedDatabase::Impl::setKeyValue(std::string key, std::string value)
 	m_keyValueStore->setKeyValue(key, value);
 
 }
+
+void EmbeddedDatabase::Impl::indexForBucket(std::string key, std::string bucket)
+{
+	//Add to bucket index
+	std::string idxkey("bucket::" + bucket);
+	//Query the key index
+	std::unique_ptr<std::unordered_set<std::string>> recordKeys(m_indexStore->getKeyValueSet(idxkey));
+	recordKeys->insert(key);
+	m_indexStore->setKeyValue(idxkey, *recordKeys.release()); // TODO: do we need this? Yes - may not be in memory store
+	// TODO: replace the above with appendKeyValueSet(key,value)
+}
+
 std::string EmbeddedDatabase::Impl::getKeyValue(std::string key)
 {
 	return m_keyValueStore->getKeyValue(key);
@@ -134,15 +150,21 @@ std::string EmbeddedDatabase::Impl::getKeyValue(std::string key)
 void EmbeddedDatabase::Impl::setKeyValue(std::string key, std::string value, std::string bucket)
 {
 	setKeyValue(key, value);
-	//Add to bucket index
-	std::string idxkey("bucket::" + bucket);
-	//Query the key index
-	std::unique_ptr<std::unordered_set<std::string>> recordKeys(m_indexStore->getKeyValueSet(idxkey));
-	recordKeys->insert(key);
-	m_indexStore->setKeyValue(idxkey, *recordKeys.release()); // TODO: do we need this? Yes - may not be in memory store
-	// TODO: replace the above with appendKeyValueSet(key,value)
-
+	indexForBucket(key, bucket);
 }
+
+void EmbeddedDatabase::Impl::setKeyValue(std::string key, std::unordered_set<std::string> value, std::string bucket)
+{
+	setKeyValue(key, value);
+	indexForBucket(key, bucket);
+}
+
+void EmbeddedDatabase::setKeyValue(std::string key, std::unordered_set<std::string> value, std::string bucket)
+{
+	mImpl->setKeyValue(key, value, bucket);
+}
+
+
 
 void EmbeddedDatabase::Impl::setKeyValue(std::string key, std::unordered_set<std::string> value)
 {
@@ -256,3 +278,5 @@ std::unique_ptr<IQueryResult> EmbeddedDatabase::query(BucketQuery& query) const
 	return mImpl->query(query);
 
 }
+
+#pragma clang diagnostic pop

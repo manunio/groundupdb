@@ -28,8 +28,9 @@ namespace groundupdb
 
 		//Key-Value user functions
 		virtual void setKeyValue(std::string key, std::string value) = 0;
-		virtual void setKeyValue(std::string key, std::string value, std::string bucket) = 0;
+//		virtual void setKeyValue(std::string key, std::string value, std::string bucket) = 0;
 		virtual void setKeyValue(std::string key, std::unordered_set<std::string> value) = 0;
+
 		virtual std::string getKeyValue(std::string key) = 0;
 
 		virtual Set getKeyValueSet(std::string key) = 0;
@@ -49,6 +50,7 @@ namespace groundupdb
 
 		//Key-Value use cases
 		virtual void setKeyValue(std::string key, std::string value) = 0;
+		virtual void setKeyValue(std::string key, std::unordered_set<std::string> value, std::string bucket) = 0;
 		virtual void setKeyValue(std::string key, std::string value, std::string bucket) = 0;
 		virtual void setKeyValue(std::string key, std::unordered_set<std::string> value) = 0;
 
@@ -63,7 +65,8 @@ namespace groundupdb
 
 		//management functions
 		static const std::unique_ptr<IDatabase> createEmpty(std::string dbname);
-		static const std::unique_ptr<IDatabase> createEmpty(std::string dbname, std::unique_ptr<KeyValueStore>& kvStore);
+		static const std::unique_ptr<IDatabase> createEmpty(std::string dbname,
+			std::unique_ptr<KeyValueStore>& kvStore);
 		static const std::unique_ptr<IDatabase> load(std::string dbname);
 		virtual void destroy() = 0;
 
