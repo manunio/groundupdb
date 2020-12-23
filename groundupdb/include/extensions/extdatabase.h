@@ -23,7 +23,10 @@ namespace groundupdbext
 
 		//Key-Value user functions
 		void setKeyValue(std::string key, std::string value);
+		void setKeyValue(std::string key, std::string value, std::string bucket);
+		void setKeyValue(std::string key, std::unordered_set<std::string> value);
 		std::string getKeyValue(std::string key);
+		std::unique_ptr<std::unordered_set<std::string>> getKeyValueSet(std::string key);
 
 		//Key-Value management functions
 		void loadKeysInfo(std::function<void(std::string key, std::string value)> callback);
@@ -42,7 +45,10 @@ namespace groundupdbext
 
 		//Key-Value user cases
 		void setKeyValue(std::string key, std::string value);
+		void setKeyValue(std::string key, std::string value, std::string bucket);
+		void setKeyValue(std::string key, std::unordered_set<std::string> value);
 		std::string getKeyValue(std::string key);
+		std::unique_ptr<std::unordered_set<std::string>> getKeyValueSet(std::string key);
 
 		//Key-Value management functions
 		void loadKeysInfo(std::function<void(std::string key, std::string value)> callback);
@@ -64,7 +70,14 @@ namespace groundupdbext
 
 		//Key-Value use cases
 		void setKeyValue(std::string key, std::string value);
+		void setKeyValue(std::string key, std::string value, std::string bucket);
+		void setKeyValue(std::string key, std::unordered_set<std::string> value);
 		std::string getKeyValue(std::string key);
+		std::unique_ptr<std::unordered_set<std::string>> getKeyValueSet(std::string key);
+
+		//Query records functions
+		std::unique_ptr<IQueryResult> query(Query& query) const;
+		std::unique_ptr<IQueryResult> query(BucketQuery& query) const = 0;
 
 		//management functions
 		static const std::unique_ptr<IDatabase> createEmpty(std::string dbname);

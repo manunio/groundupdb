@@ -6,7 +6,7 @@
 #include "catch.hpp"
 #include "groundupdb/groundupdb.h"
 #include "groundupdb/groundupdbext.h"
-
+#if 0
 TEST_CASE("Measure basic performance", "[setKeyValue, getKeyValue]")
 {
 	SECTION("Store and Retrieve 100 000 keys - Memory cache key-value store")
@@ -222,3 +222,4 @@ TEST_CASE("Measure basic performance", "[setKeyValue, getKeyValue]")
 	}
 
 }
+#endif
