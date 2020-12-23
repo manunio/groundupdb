@@ -244,6 +244,8 @@ std::unique_ptr<std::unordered_set<std::string>> EmbeddedDatabase::getKeyValueSe
 	return mImpl->getKeyValueSet(key);
 }
 
+// MARK: Query functions
+
 std::unique_ptr<IQueryResult> EmbeddedDatabase::query(Query& query) const
 {
 	return mImpl->query(query);
