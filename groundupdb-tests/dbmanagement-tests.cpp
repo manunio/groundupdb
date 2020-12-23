@@ -23,6 +23,8 @@ TEST_CASE("Create a new empty database", "[CreateEmptyDatabase]")
 
 		std::cout << "iterating over db directory" << std::endl;
 		const auto& p = fs::directory_iterator(db->getDirectory());
+		std::cout << "val: " << db->getDirectory() << '\n';
+
 		REQUIRE(p == end(p));
 
 		std::cout << "destroying db" << std::endl;

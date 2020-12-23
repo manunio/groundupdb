@@ -12,7 +12,7 @@ namespace groundupdbext
 	{
 	public:
 		Impl();
-		Impl(std::unique_ptr<KeyValueStore>& toCache);
+		explicit Impl(std::unique_ptr<KeyValueStore>& toCache);
 
 		std::unordered_map<std::string, std::string, HighwayHash> m_KeyValueStore;
 		std::unordered_map<std::string, std::unordered_set<std::string>, HighwayHash> m_listStore;
@@ -69,7 +69,7 @@ namespace groundupdbext
 		// Only ever read from our in memory map!
 		const auto& v = mImpl->m_KeyValueStore.find(key);
 		if (v == mImpl->m_KeyValueStore.end())
-			return ""; // DANGEROUS! Should be 'not found'. TODO error handling.
+			return ""; // DANGEROUS! Should be 'not found'. TODO: error handling.
 		return v->second;
 	}
 

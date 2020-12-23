@@ -23,6 +23,7 @@ namespace groundupdbext
 	FileKeyValueStore::Impl::Impl(std::string fullpath)
 		: m_fullpath(fullpath)
 	{
+		;
 	}
 
 	FileKeyValueStore::FileKeyValueStore(std::string fullpath)
@@ -72,11 +73,13 @@ namespace groundupdbext
 				//check if extension is .kv
 				if (".kv" == p.path().extension())
 				{
-					std::ifstream t(p.path());
-					std::string value;
+					// If so, open file
 					std::string keyWithString = p.path().filename().string();
 					//ASSUMPTION always ends with _string.kv
 					std::string key = keyWithString.substr(0, keyWithString.length() - 10);  // DANGEROUS!!
+
+					std::ifstream t(p.path());
+					std::string value;
 
 					t.seekg(0, std::ios::end);
 					value.reserve(t.tellg());
@@ -106,7 +109,7 @@ namespace groundupdbext
 
 	void FileKeyValueStore::setKeyValue(std::string key, std::unordered_set<std::string> value)
 	{
-		// store in _string_set.kl file elements_num<length,value...>...
+		// store in _string_set.kv file elements_num<length,value...>...
 		std::ofstream os;
 		std::string fp(mImpl->m_fullpath + "/" + key + "_string_set.kv");
 		os.open(fp, std::ios::out | std::ios::trunc);

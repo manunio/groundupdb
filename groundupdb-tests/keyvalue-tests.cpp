@@ -27,6 +27,8 @@ TEST_CASE("Store and retrieve a value", "[setKeyValue, getKeyValue]")
 
 
 		db->destroy();
+		REQUIRE(!fs::exists(fs::status(db->getDirectory())));
+
 	}
 
 	SECTION("Bucketed set and get")
@@ -42,6 +44,8 @@ TEST_CASE("Store and retrieve a value", "[setKeyValue, getKeyValue]")
 		REQUIRE(value == db->getKeyValue(key));
 
 		db->destroy();
+		REQUIRE(!fs::exists(fs::status(db->getDirectory())));
+
 	}
 }
 
@@ -70,5 +74,7 @@ TEST_CASE("Store and retrieve a list", "setkeyValue(std::string, std::unordered_
 		REQUIRE(result.get()->find(v3) != result.get()->end());
 
 		db->destroy();
+		REQUIRE(!fs::exists(fs::status(db->getDirectory())));
+
 	}
 }

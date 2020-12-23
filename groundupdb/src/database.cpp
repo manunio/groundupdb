@@ -8,7 +8,6 @@
 #include "extensions/extquery.h"
 
 #include <iostream>
-#include <fstream>
 #include <filesystem>
 #include <unordered_map>
 
@@ -227,7 +226,7 @@ void EmbeddedDatabase::setKeyValue(std::string key, std::string value)
 	mImpl->setKeyValue(key, value);
 }
 
-void groundupdbext::EmbeddedDatabase::setKeyValue(std::string key, std::string value, std::string bucket)
+void EmbeddedDatabase::setKeyValue(std::string key, std::string value, std::string bucket)
 {
 	mImpl->setKeyValue(key, value, bucket);
 }
@@ -240,7 +239,7 @@ std::string EmbeddedDatabase::getKeyValue(std::string key)
 	return mImpl->getKeyValue(key);
 }
 
-std::unique_ptr<std::unordered_set<std::string>> groundupdbext::EmbeddedDatabase::getKeyValueSet(std::string key)
+std::unique_ptr<std::unordered_set<std::string>> EmbeddedDatabase::getKeyValueSet(std::string key)
 {
 	return mImpl->getKeyValueSet(key);
 }
